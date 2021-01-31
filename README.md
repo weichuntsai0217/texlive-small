@@ -12,15 +12,15 @@ Also, it focuses on English and traditional Chinese, so its size is much less th
 Docker is cross-platform so you can run **texlive-small** on Mac OSX / Linux / Windows.
 * Step 2. To download the image, run
 ```
-docker pull weichuntsai/texlive-small:1.0
+docker pull weichuntsai/texlive-small:1.1.0
 ```
 * Step 3. To initialize the container, run
 ```
-docker run --name ${The Container Name You Want} -dt -v ${Your Directory for Tex files}:/home weichuntsai/texlive-small:1.0
+docker run --name ${The Container Name You Want} -dt -v ${Your Directory for Tex files}:/home weichuntsai/texlive-small:1.1.0
 ```
 For example,
 ```
-docker run --name mylatex -dt -v /Users/jimmy_tsai/Documents:/home weichuntsai/texlive-small:1.0
+docker run --name mylatex -dt -v /Users/jimmy_tsai/Documents:/home weichuntsai/texlive-small:1.1.0
 ```
 * Step 4. To enter into the container you initialized in Step 3 (assume its name is `mylatex`), run
 ```
@@ -42,12 +42,17 @@ $ txrun ${tex_file} ${engine_type}
 where `tex_file` is your `tex`, and `engine_type` is the LaTeX engine and it could be one of `xelatex`, `latex`, or `pdflatex`.
 Now we are going to explain which `engine_type` you should use.
 Let's assume your `tex` is `my_input.tex`, then:
-* Scenario 1 - if the `tex` contains non-English content (for example, traditional Chinese), you can run:
+* Scenario 1 - if the `tex` contains the command `\usepackage{fontspec}` (because you want to use `\setmainfont{another font}` to change the font), then you have to run:
 ```
 $ txrun my_input.tex xelatex
 ```
 
-* Scenario 2 - if the `tex` contains English content and `eps` figures, you can run:
+* Scenario 2 - if the `tex` contains non-English content (for example, traditional Chinese), then you have to run:
+```
+$ txrun my_input.tex xelatex
+```
+
+* Scenario 3 - if the `tex` (without `\usepackage{fontspec}`) contains English content and `eps` figures, then you can run:
 ```
 $ txrun my_input.tex xelatex
 ```
@@ -56,7 +61,7 @@ or
 $ txrun my_input.tex latex
 ```
 
-* Scenario 3 - if the `tex` contains English content and does not contain `eps` figures, you can run:
+* Scenario 4 - if the `tex` (without `\usepackage{fontspec}`) contains English content and does not contain `eps` figures, then you can run:
 ```
 $ txrun my_input.tex xelatex
 ```
@@ -101,20 +106,61 @@ pdflatex my_input.tex
 rm my_input.aux my_input.bbl my_input.blg my_input.idx my_input.ilg my_input.ind my_input.lof my_input.log my_input.lot my_input.out my_input.toc my_input.dvi
 ```
 
-## Usage - CJK fonts (use traditional Chinese as the example)
-In your `tex`, before the line `\begin{document}`, addd lines as below
+## Font Management
+### I want to install new fonts
+There are 2 ways to install fonts you like:
+1. `apt-get install ${font_package_name}` to install the fonts in Ubuntu library.
+2. Download the font and run `addfont`. For example, you can visit [https://fonts.google.com/specimen/Roboto](https://fonts.google.com/specimen/Roboto) and click "Download family" button to download "Roboto" font. The downloaded file is a `zip` file. Unzip it and you would get an unzipped folder called "Roboto". Then in the `texlive-small` container, go to the directory containing "Roboto" folder and then run `addfont ./Roboto`.
+
+### How to check font files installed position in `texlive-small` container
+Just run `fc-list`
+
+### How to show installed font names which I want to use in `tex`
+Just run `fc-list : family`
+
+### Pre-installed fonts in `texlive-small` image (you don't need to install again)
+* `Roboto` -> sans-serif for English
+* `Noto Serif TC` -> serif for traditional Chinese
+* `Noto Sans TC` -> sans-serif for traditional Chinese
+
+## Usage - English fonts
+`Latex` has its default English font. If you wan to change it (ex: you want to change it into `Roboto`), please do the following:
+In your `tex`, before the line `\begin{document}`, add lines as below
 ```
 % In your tex file
-\usepackage[BoldFont, SlantFont]{xeCJK}
-\setCJKmainfont{AR PL UMing TW} % Fill in any CJK font name you installed. "AR PL UMing TW" is the only CJK font installed in texlive-small image.
+\usepackage{fontspec}
+\setmainfont{Roboto} % Fill in any English font name you installed.
 
 \begin{document}
 ...
 \end{document}
 ```
 
-For other CJK fonts, please use `apt-get install ${font_package_name}` to install any fonts you want.
+## Usage - CJK fonts (use traditional Chinese as the example)
+There are 2 scenarios
+### Scenario 1: The CJK font supports Bold (ex: `Noto Serif TC`)
+In your `tex`, before the line `\begin{document}`, add lines as below
+```
+% In your tex file
+\usepackage{xeCJK}
+\setCJKmainfont{Noto Serif TC} % Fill in any CJK font name you installed.
 
+\begin{document}
+...
+\end{document}
+```
+
+### Scenario 2: The CJK font does not support Bold & Italic (ex: `AR PL UMing TW`)
+In your `tex`, before the line `\begin{document}`, add lines as below
+```
+% In your tex file
+\usepackage[BoldFont, SlantFont]{xeCJK}
+\setCJKmainfont{AR PL UMing TW} % Fill in any CJK font name you installed.
+
+\begin{document}
+...
+\end{document}
+```
 
 ## Usage - TeX / LaTeX package management
 ### Search packages by the package name

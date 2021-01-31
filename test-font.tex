@@ -1,0 +1,44 @@
+\documentclass[10pt, a4paper, oneside]{article}
+\usepackage[utf8]{inputenc}
+\setlength\parindent{0pt}
+
+% When using \setmainfont, it must be together with \usepackage{fontspec}
+\usepackage{fontspec}
+\setmainfont{Roboto}
+
+\usepackage{xeCJK}
+\setCJKmainfont{Noto Serif TC}
+% \setCJKmainfont{Noto Sans TC}
+
+\usepackage{geometry}
+\geometry{
+  left=3.0cm,
+  top=2.2cm,
+  right=3.0cm,
+  bottom=2.5cm,
+  footskip=1.0cm
+}
+
+\begin{document}
+\section{Test Font - English}
+0123456789 \newline
+\textbf{0123456789} \newline
+\textit{0123456789} \newline
+abcdefghijklmnopqrstuvwxyz \newline
+\textbf{abcdefghijklmnopqrstuvwxyz} \newline
+\textit{abcdefghijklmnopqrstuvwxyz} \newline
+ABCDEFGHIJKLMNOPQRSTUVWXYZ \newline
+\textbf{ABCDEFGHIJKLMNOPQRSTUVWXYZ} \newline
+\textit{ABCDEFGHIJKLMNOPQRSTUVWXYZ} \newline
+\& \% \$ \# \_ \{ \} [\ ]\ \textasciitilde \textasciicircum \textbackslash \newline
+\textbf{\& \% \$ \# \_ \{ \} [\ ]\ \textasciitilde \textasciicircum \textbackslash} \newline
+\textit{\& \% \$ \# \_ \{ \} [\ ]\ \textasciitilde \textasciicircum \textbackslash} \newline
+, . ? ` ! @ * ( ) < > - + = ' " \newline
+\textbf{, . ? ` ! @ * ( ) < > - + = ' "} \newline
+\textit{, . ? ` ! @ * ( ) < > - + = ' "} \newline
+
+\section{Test Font - Chinese}
+一二三我是誰關，。、：「」『 』（）\newline
+\textbf{一二三我是誰關，。、：「」『 』（）} \newline
+
+\end{document}
