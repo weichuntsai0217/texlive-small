@@ -1,0 +1,186 @@
+\documentclass[10pt, a4paper, oneside]{article}
+\usepackage[utf8]{inputenc}
+
+% To assign English fonts
+% \usepackage{fontspec}
+% \setmainfont{Roboto-Regular.ttf}[
+%   % Path=/Some Folder Your Fonts/ , % If you want to assign folder path which contains your font files.
+%   BoldFont=Roboto-Bold.ttf ,
+%   ItalicFont=Roboto-Italic.ttf ,
+%   BoldItalicFont=Roboto-BoldItalic.ttf
+% ]
+
+% To assign Chinese (CJK) fonts
+% \usepackage[AutoFakeBold=1, AutoFakeSlant=0.2]{xeCJK}
+% \setCJKmainfont{NotoSerifTC-Regular.otf}[
+%   BoldFont=NotoSerifTC-Bold.otf
+% ]
+
+\setlength\parindent{0pt}
+
+
+\usepackage{geometry}
+\geometry{
+  left=3.0cm,
+  top=2.2cm,
+  right=3.0cm,
+  bottom=2.5cm,
+  footskip=1.0cm
+}
+
+
+\usepackage[colorlinks=true, allcolors=blue, unicode]{hyperref}
+\usepackage{enumitem}
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+\usepackage{longtable,booktabs}
+
+\usepackage{graphicx}
+
+\usepackage{imakeidx}
+\makeindex[intoc]
+
+\pagestyle{empty}
+
+
+
+
+\begin{document}
+
+
+
+
+\section*{Table Examples}\label{table-examples}\markboth{Table Examples}{}
+\addcontentsline{toc}{section}{Table Examples}
+
+\section{Standard Markdown Table}\label{standard-markdown-table}
+
+A standard markdown table supports single line only in each column and its width can not be modified.
+This table can also be rendered well on common markdown platforms (ex: GitHub).
+
+\begin{longtable}[c]{@{}rllc@{}}
+\caption{A Standard Markdown Table}\tabularnewline
+\toprule
+Right & Left & Default & Center\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+Right & Left & Default & Center\tabularnewline
+\midrule
+\endhead
+12 & 12 & 12 & 12\tabularnewline
+123 & 123 & 123 & 123\tabularnewline
+1 & 1 & 1 & 1\tabularnewline
+\bottomrule
+\end{longtable}
+
+\section{Extended Markdown Table}\label{extended-markdown-table}
+
+An extended markdown table supports multiple lines in each column.
+This table can not be rendered well on common markdown platforms (ex: GitHub).
+
+\begin{longtable}[c]{@{}clr@{}}
+\caption{An Extended Markdown Table}\tabularnewline
+\toprule
+\begin{minipage}[b]{0.14\columnwidth}\centering\strut
+Centered
+Header
+\strut\end{minipage} & \begin{minipage}[b]{0.11\columnwidth}\raggedright\strut
+Default
+Aligned
+\strut\end{minipage} & \begin{minipage}[b]{0.11\columnwidth}\raggedleft\strut
+Right
+Aligned
+\strut\end{minipage}\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+\begin{minipage}[b]{0.14\columnwidth}\centering\strut
+Centered
+Header
+\strut\end{minipage} & \begin{minipage}[b]{0.11\columnwidth}\raggedright\strut
+Default
+Aligned
+\strut\end{minipage} & \begin{minipage}[b]{0.11\columnwidth}\raggedleft\strut
+Right
+Aligned
+\strut\end{minipage}\tabularnewline
+\midrule
+\endhead
+\begin{minipage}[t]{0.14\columnwidth}\centering\strut
+First
+\strut\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
+row,
+long
+content
+\strut\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedleft\strut
+12.0
+\strut\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.14\columnwidth}\centering\strut
+Second
+\strut\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
+row
+\strut\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedleft\strut
+5.0
+\strut\end{minipage}\tabularnewline
+\bottomrule
+\end{longtable}
+
+\section{How to Make an Extended Markdown Table Wider?}\label{how-to-make-an-extended-markdown-table-wider}
+
+For an extended markdown table, you can also modify its width by adding more hyphens ``-''.
+
+\begin{longtable}[c]{@{}clr@{}}
+\caption{A Wider Extended Markdown Table}\tabularnewline
+\toprule
+\begin{minipage}[b]{0.27\columnwidth}\centering\strut
+Centered
+Header
+\strut\end{minipage} & \begin{minipage}[b]{0.18\columnwidth}\raggedright\strut
+Default
+Aligned
+\strut\end{minipage} & \begin{minipage}[b]{0.18\columnwidth}\raggedleft\strut
+Right
+Aligned
+\strut\end{minipage}\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+\begin{minipage}[b]{0.27\columnwidth}\centering\strut
+Centered
+Header
+\strut\end{minipage} & \begin{minipage}[b]{0.18\columnwidth}\raggedright\strut
+Default
+Aligned
+\strut\end{minipage} & \begin{minipage}[b]{0.18\columnwidth}\raggedleft\strut
+Right
+Aligned
+\strut\end{minipage}\tabularnewline
+\midrule
+\endhead
+\begin{minipage}[t]{0.27\columnwidth}\centering\strut
+First
+\strut\end{minipage} & \begin{minipage}[t]{0.18\columnwidth}\raggedright\strut
+row,
+long content,
+long content,
+long content,
+long content,
+long content,
+\strut\end{minipage} & \begin{minipage}[t]{0.18\columnwidth}\raggedleft\strut
+12.0
+\strut\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.27\columnwidth}\centering\strut
+Second
+\strut\end{minipage} & \begin{minipage}[t]{0.18\columnwidth}\raggedright\strut
+row
+\strut\end{minipage} & \begin{minipage}[t]{0.18\columnwidth}\raggedleft\strut
+5.0
+\strut\end{minipage}\tabularnewline
+\bottomrule
+\end{longtable}
+
+
+\printindex
+\end{document}

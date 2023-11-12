@@ -1,0 +1,314 @@
+\documentclass[10pt, a4paper, oneside]{article}
+\usepackage[utf8]{inputenc}
+
+% To assign English fonts
+% \usepackage{fontspec}
+% \setmainfont{Roboto-Regular.ttf}[
+%   % Path=/Some Folder Your Fonts/ , % If you want to assign folder path which contains your font files.
+%   BoldFont=Roboto-Bold.ttf ,
+%   ItalicFont=Roboto-Italic.ttf ,
+%   BoldItalicFont=Roboto-BoldItalic.ttf
+% ]
+
+% To assign Chinese (CJK) fonts
+% \usepackage[AutoFakeBold=1, AutoFakeSlant=0.2]{xeCJK}
+% \setCJKmainfont{NotoSerifTC-Regular.otf}[
+%   BoldFont=NotoSerifTC-Bold.otf
+% ]
+
+\setlength\parindent{0pt}
+
+
+\usepackage{geometry}
+\geometry{
+  left=3.0cm,
+  top=2.2cm,
+  right=3.0cm,
+  bottom=2.5cm,
+  footskip=1.0cm
+}
+
+
+\usepackage[colorlinks=true, allcolors=blue, unicode]{hyperref}
+\usepackage{enumitem}
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+\usepackage{longtable,booktabs}
+
+\usepackage{graphicx}
+
+\usepackage{imakeidx}
+\makeindex[intoc]
+
+\pagestyle{empty}
+
+
+
+
+\begin{document}
+
+
+
+
+\section{What is puredoc?}\label{what-is-puredoc}
+
+\textbf{puredoc} is a docker image for document generation based on
+\href{https://github.com/weichuntsai0217/texlive-small}{texlive-small} and
+\href{https://pandoc.org/}{pandoc}.
+It allows you to generate documents in multiple file formats
+from single yaml/markdown source.
+
+\section{Installation}\label{installation}
+
+\begin{itemize}
+\item
+  Step 1. Install \texttt{docker} by following \href{https://docs.docker.com/install/}{Docker official installation guide}.
+  Docker is cross-platform so you can run \textbf{puredoc} on Mac OSX / Linux / Windows.
+\item
+  Step 2. To download the image, run
+
+\begin{verbatim}
+$ docker pull weichuntsai/puredoc:1.0
+\end{verbatim}
+\item
+  Step 3. To initialize the container, run
+
+\begin{verbatim}
+$ docker run --name ${container_name} -dt \
+  -v ${host_dir}:${container_dir} weichuntsai/puredoc:1.0
+\end{verbatim}
+
+  For example,
+
+\begin{verbatim}
+$ docker run --name mydoc -dt \
+  -v /Users/jimmy_tsai:/home weichuntsai/puredoc:1.0
+\end{verbatim}
+\item
+  Step 4. To enter into the container you initialized in Step 3 (assume its name is \texttt{mydoc}), run
+
+\begin{verbatim}
+$ docker exec -it mydoc bash
+\end{verbatim}
+
+  If you initialize the container as the example of Step 3,
+  then you would find that all contents in the \texttt{/Users/jimmy\_tsai} of the host computer
+  would show up in the \texttt{/home} of the container.
+\end{itemize}
+
+For what commands you can use in this container, please refer to the following \textbf{Usage} parts.
+
+\section{Usage - README}\label{usage---readme}
+
+To see \texttt{README} in the container, just run:
+
+\begin{verbatim}
+$ more /README-puredoc.md
+\end{verbatim}
+
+\section{Usage - generate documents}\label{usage---generate-documents}
+
+The command is as below
+
+\begin{verbatim}
+$ puredoc ${my_input_file} ${template_type} ${output_extension} \
+  -o ${output_name_without_ext} -c "${CJK_font_name}" -d ${output_dir}
+\end{verbatim}
+
+where \texttt{-o} (\texttt{-\/-output}), \texttt{-c} (\texttt{-\/-cjk}), \texttt{-d} (\texttt{-\/-dir}) are options you don't necessarily have to provide them.
+
+The \texttt{template\_type} supports \texttt{resume}, \texttt{coverletter}, \texttt{article}, or \texttt{book}
+and the \texttt{output\_extension} depends on the \texttt{template\_type} you choose and would be explained in the following sections.
+
+\subsection{To generate a resume / CV}\label{to-generate-a-resume-cv}
+
+\begin{verbatim}
+$ puredoc ${my_input_file} resume ${output_extension}
+\end{verbatim}
+
+For the template type \texttt{resume},
+the input file should be a \texttt{yaml} and
+the allowed output extensions are \texttt{pdf}, \texttt{md}, \texttt{txt} and \texttt{tex}.
+For example:
+
+\begin{itemize}
+\item
+  To generate \texttt{my-resume.pdf}
+
+\begin{verbatim}
+$ puredoc my-resume.yaml resume pdf
+\end{verbatim}
+\item
+  To generate \texttt{my-resume.md}
+
+\begin{verbatim}
+$ puredoc my-resume.yaml resume md
+\end{verbatim}
+\item
+  To generate \texttt{my-resume.txt}
+
+\begin{verbatim}
+$ puredoc my-resume.yaml resume txt
+\end{verbatim}
+\item
+  To generate \texttt{my-resume.tex}
+
+\begin{verbatim}
+$ puredoc my-resume.yaml resume tex
+\end{verbatim}
+\item
+  To generate \texttt{my-resume.pdf}, \texttt{my-resume.md}, \texttt{my-resume.txt}, \texttt{my-resume.tex} at one time
+
+\begin{verbatim}
+$ puredoc my-resume.yaml resume all
+\end{verbatim}
+\end{itemize}
+
+If you want to change the output file name, you can use \texttt{-o} or \texttt{-\/-output} with a file name without extension.
+For example, you want the output file is \texttt{your\_resume.pdf}, then please run
+
+\begin{verbatim}
+$ puredoc my-resume.yaml resume pdf -o your_resume
+\end{verbatim}
+
+If you provide \texttt{-o} but not with a file name you want,
+the output file would be the form like \texttt{output-of-puredoc-2018-12-24-12-39-03.pdf}
+
+If you want to change the output directory (default is the current directory), you can use \texttt{-d} or \texttt{-\/-dir} with a directory path.
+For example, you want the output directory is \texttt{/aa/bb}, then please run
+
+\begin{verbatim}
+$ puredoc my-resume.yaml resume pdf -d /aa/bb
+\end{verbatim}
+
+If you provide \texttt{-d} but not with a directory path,
+the output directory would be \texttt{output/} in the current directory.
+
+If you have non-English content (for example, traditional Chinese), you can use \texttt{-c} or \texttt{-\/-cjk} with a CJK font name.
+For example,
+
+\begin{verbatim}
+$ puredoc my-resume.yaml resume pdf -c "WenQuanYi Zen Hei" 
+\end{verbatim}
+
+If you provide \texttt{-c} but not with a CJK font name,
+\texttt{puredoc} would use ``AR PL UMing TW'' (the only pre-installed CJK font in puredoc image) as the default CJK font.
+
+Your input file can also be from the pipe data like this:
+
+\begin{verbatim}
+$ cat my-resume.yaml | puredoc resume pdf -o your_resume
+\end{verbatim}
+
+If your input file is from pipe data, then you have to use \texttt{-o} option like above to assgin the output file name.
+
+\subsection{To generate a coverletter}\label{to-generate-a-coverletter}
+
+\begin{verbatim}
+$ puredoc ${my_input_file} coverletter ${output_extension}
+\end{verbatim}
+
+For the template type \texttt{coverletter},
+the input file should be a \texttt{yaml} and
+the allowed output extensions are \texttt{pdf}, \texttt{md},\texttt{txt} and \texttt{tex}.
+About the examples, please refer to \textbf{To generate a resume / CV} above.
+The only difference is the template type.
+
+\subsection{To generate an article}\label{to-generate-an-article}
+
+\begin{verbatim}
+$ puredoc ${my_input_file} article ${output_extension}
+\end{verbatim}
+
+For the template type \texttt{article},
+the input file should be a \texttt{md} and
+the allowed output extensions are \texttt{pdf} and \texttt{tex}.
+About the examples, please refer to \textbf{To generate a resume / CV} above.
+The only difference is the template type and the extension of the input file.
+
+\subsection{To generate a book}\label{to-generate-a-book}
+
+\begin{verbatim}
+$ puredoc ${my_input_file} book ${output_extension}
+\end{verbatim}
+
+For the template type \texttt{book},
+the input file should be a \texttt{md} and
+the allowed output extensions are \texttt{pdf} and \texttt{tex}.
+About the examples, please refer to \textbf{To generate a resume / CV} above.
+The only difference is the template type and the extension of the input file.
+
+\subsection{To generate a big book / article}\label{to-generate-a-big-book-article}
+
+Sometimes you want to divide a big \texttt{md} into several \texttt{md} and then compile them into a pdf.
+To do this, you have to provide a \texttt{txt} file (assume it is \texttt{my-big-book.txt}) containing your \texttt{md} file names like this
+
+\begin{verbatim}
+title-preface-toc-bib.md
+chapter-1.md
+chapter-2.md
+chapter-3.md
+\end{verbatim}
+
+Then you can run:
+
+\begin{verbatim}
+$ puredoc my-big-book.txt book pdf
+\end{verbatim}
+
+For more details, please refer to \texttt{examples/book-with-multiple-files/}
+
+\section{\texorpdfstring{How the input \texttt{yaml} or \texttt{md} look like?}{How the input yaml or md look like?}}\label{how-the-input-yaml-or-md-look-like}
+
+\textbf{Please refer to \texttt{examples/} for more details.}
+
+\section{Special characters in yaml files or yaml header of markdown files}\label{special-characters-in-yaml-files-or-yaml-header-of-markdown-files}
+
+To show \texttt{:} in \texttt{pdf}, \texttt{md} and \texttt{txt} normally,
+you have to type one space with \texttt{\textgreater{}} just at the right of the key and
+put your value to the next line of the key.
+
+For example, if our key is ``tech'' and our value is ``Frontend technologies: React, Redux'',
+then you should type words as below:
+
+\begin{verbatim}
+# In your yaml file or yaml header of the markdown file
+---
+tech: >
+  Frontend technologies: React, Redux
+...
+\end{verbatim}
+
+To show other common special characters \texttt{@\ -\ \%\ \&\ \textbar{}\ +\ \{\ \}\ \#\ \textbackslash{}\ *\ \$\ \^{}\ \_\ \textgreater{}\ \textless{}\ {[}\ {]}}
+in \texttt{pdf}, \texttt{md} and \texttt{txt} normally, please refer to the following table:
+
+\begin{longtable}[c]{@{}cc@{}}
+\toprule
+What to show & What you have to type in \texttt{.yaml}\tabularnewline
+\midrule
+\endhead
+@ & \textbackslash{}@\tabularnewline
+- & \textbackslash{}-\tabularnewline
+\% & \textbackslash{}\%\tabularnewline
+\& & \textbackslash{}\&\tabularnewline
+\textbar{} & \textbackslash{}\textbar{}\tabularnewline
++ & \textbackslash{}+\tabularnewline
+\{ & \textbackslash{}\{\tabularnewline
+\} & \textbackslash{}\}\tabularnewline
+\# & \textbackslash{}\#\tabularnewline
+\textbackslash{} & \textbackslash{}\textbackslash{}\tabularnewline
+* & \textbackslash{}*\tabularnewline
+\$ & \textbackslash{}\$\tabularnewline
+\^{} & \textbackslash{}\^{}\tabularnewline
+\_ & \textbackslash{}\_\tabularnewline
+\textgreater{} & \textbackslash{}\textgreater{}\tabularnewline
+\textless{} & \textbackslash{}\textless{}\tabularnewline
+{[} & \textbackslash{}{[}\tabularnewline
+{]} & \textbackslash{}{]}\tabularnewline
+\bottomrule
+\end{longtable}
+
+
+\printindex
+\end{document}
