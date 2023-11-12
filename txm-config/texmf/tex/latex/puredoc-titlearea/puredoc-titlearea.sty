@@ -1,0 +1,67 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{puredoc-titlearea}[2018/12/14 puredoc-titlearea]
+\RequirePackage{xifthen}
+\RequirePackage{etoolbox}
+\ProcessOptions\relax
+
+\newcommand*{\puredocTitleareaTitle}[1]{\def\@title{{\Large\bfseries #1}}}
+
+\def\@puredocTitleareaIsAuthorStart{true}
+\newcommand*{\puredocTitleareaSingleAuthor}[2]{{\normalsize #1$^{#2}$}}
+\newcommand*{\puredocTitleareaAuthors}[2]{%
+  \ifthenelse{\equal{\@puredocTitleareaIsAuthorStart}{true}}
+  {%
+    \def\@authors{\puredocTitleareaSingleAuthor{#1}{#2}}%
+    \def\@puredocTitleareaIsAuthorStart{false}
+  }%
+  {%
+    \appto\@authors{, \puredocTitleareaSingleAuthor{#1}{#2}}%
+  }%
+}
+
+\def\@puredocTitleareaIsOrgStart{true}
+\newcommand*{\puredocTitleareaSingleOrg}[2]{{\noindent\small\itshape $^{#2}$#1}\par}
+\newcommand*{\puredocTitleareaOrgs}[2]{%
+  \ifthenelse{\equal{\@puredocTitleareaIsOrgStart}{true}}
+  {%
+    \def\@orgs{\puredocTitleareaSingleOrg{#1}{#2}}
+    \def\@puredocTitleareaIsOrgStart{false}
+  }%
+  {%
+    \appto\@orgs{\puredocTitleareaSingleOrg{#1}{#2}}%
+  }%
+}%
+
+\newcommand*{\puredocTitleareaDate}[1]{\def\@date{{\small #1}}}
+
+\newcommand*{\puredocTitleareaMaketitle}[1][center]{%
+  { \ifthenelse{\equal{#1}{center}}{\centering}{}%
+    \ifthenelse{\isundefined{\@title}}%
+    {}%
+    {%
+      \noindent
+      \@title%
+      \par\vspace{0.5cm}%
+    }%
+    \ifthenelse{\isundefined{\@authors}}%
+    {}%
+    {%
+      \noindent
+      \@authors%
+      \par\vspace{0.2cm}%
+    }%
+    \ifthenelse{\isundefined{\@orgs}}%
+    {}%
+    {%
+      \@orgs%
+      \par\vspace{0.2cm}%
+    }%
+    \ifthenelse{\isundefined{\@date}}%
+    {}%
+    {%
+      \noindent
+      \@date%
+      \par%
+    }%
+  }%
+}%

@@ -1,0 +1,51 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{puredoc-titlepage}[2018/12/14 puredoc-titlepage]
+\RequirePackage{graphicx}
+\RequirePackage{xifthen}
+\RequirePackage{etoolbox}
+\ProcessOptions\relax
+
+\newcommand*{\puredocTitlepageTitle}[1]{\def\@title{{\huge\bfseries #1\par}}}
+\newcommand*{\puredocTitlepageSubtitle}[1]{\def\@subtitle{{\Large #1\par}}}
+\newcommand*{\puredocTitlepageVersion}[1]{\def\@version{{\large #1\par}}}
+
+\def\@puredocTitlepageIsAuthorStart{true}
+\newcommand*{\puredocTitlepageSingleAuthor}[2]{%
+  {\large\bfseries #1\par}%
+  \vspace{0.1cm}%
+  {\normalsize\itshape #2\par}%
+  \vspace{0.2cm}%
+}%
+\newcommand*{\puredocTitlepageAuthors}[2]{%
+  \ifthenelse{\equal{\@puredocTitlepageIsAuthorStart}{true}}
+  {%
+    \def\@authors{\puredocTitlepageSingleAuthor{#1}{#2}}%
+    \def\@puredocTitlepageIsAuthorStart{false}
+  }%
+  {%
+    \appto\@authors{\puredocTitlepageSingleAuthor{#1}{#2}}%
+  }%
+}
+
+\newcommand*{\puredocTitlepageDate}[1]{\def\@date{{\large #1\par}}}%
+
+\newcommand*{\puredocTitlepagePublisherFig}[2][4cm]{%
+  \def\@publisherfig{\includegraphics[width=#1]{#2}\par}%
+}%
+
+\newcommand*{\puredocTitlepagePublisherName}[1]{\def\@publishername{{\large #1\par}}}%
+\newcommand*{\puredocTitlepagePublisherInfo}[1]{\def\@publisherinfo{{\large #1\par}}}%
+
+\newcommand*{\puredocTitlepageMaketitle}[1][left]{%
+  \begin{titlepage}
+    \ifthenelse{\equal{#1}{center}}{\centering}{}%
+    \ifthenelse{\isundefined{\@title}}{}{\vspace*{1cm}\@title}%
+    \ifthenelse{\isundefined{\@subtitle}}{}{\vspace{0.2cm}\@subtitle}%
+    \ifthenelse{\isundefined{\@version}}{}{\vspace{0.8cm}\@version}%
+    \ifthenelse{\isundefined{\@authors}}{}{\vspace{3cm}\@authors}%
+    \ifthenelse{\isundefined{\@date}}{}{\vfill\@date\vfill}%
+    \ifthenelse{\isundefined{\@publisherfig}}{}{\@publisherfig}%
+    \ifthenelse{\isundefined{\@publishername}}{}{\@publishername}%
+    \ifthenelse{\isundefined{\@publisherinfo}}{}{\@publisherinfo}%
+  \end{titlepage}
+}%
