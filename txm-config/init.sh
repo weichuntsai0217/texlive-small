@@ -1,5 +1,6 @@
 #!/bin/bash
 
+echo "alias ls='ls --color=auto'" >> /root/.bashrc
 echo "alias ll='ls -alFh'" >> /root/.bashrc
 echo "source /usr/share/bash-completion/completions/git" >> /root/.bashrc
 
