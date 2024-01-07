@@ -29,10 +29,12 @@
 
 * Step 5. For latex templates, feel free to copy `.tex` files in `texlive` container in `/txm-config/puredoc-examples/article/` , `/txm-config/puredoc-examples/book/`, ...etc. To compile latex file like `my-book.tex` , please run
   ```
-  latexmk -xelatex -file-line-error -halt-on-error -interaction=nonstopmode -synctex=1 my-book.tex
+  latexmk -xelatex -file-line-error -halt-on-error -interaction=nonstopmode -synctex=1 my-book.tex ; \
+  latexmk -c
   ```
   or if there are Windows special invisible characters like new line (`\r\n`), ...etc, please use `dos2unix` to trim these characters first
   ```
-  dos2unix my-book.tex; \
-  latexmk -xelatex -file-line-error -halt-on-error -interaction=nonstopmode -synctex=1 my-book.tex
+  dos2unix my-book.tex ; \
+  latexmk -xelatex -file-line-error -halt-on-error -interaction=nonstopmode -synctex=1 my-book.tex ; \
+  latexmk -c
   ```
